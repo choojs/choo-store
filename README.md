@@ -16,6 +16,15 @@ Create a namespaced store for a [`choo`](https://github.com/choojs/choo) applica
 [10]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [11]: https://github.com/feross/standard
 
+## Features
+
+- Conventions!
+  - `namespace` to keep your state clean
+  - `initialState` to make resetting easy
+  - `events` for all your events
+  - `reset` event included by default
+  - `render` is a default option for all events
+
 ## Install
 
 ```
