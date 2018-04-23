@@ -7,6 +7,9 @@
     "url": "https://github.com/ungoldman/choo-store/issues"
   },
   "devDependencies": {
+    "budo": "^11.2.0",
+    "choo": "^6.11.0",
+    "choo-devtools": "^2.5.0",
     "standard": "^11.0.1"
   },
   "homepage": "https://github.com/ungoldman/choo-store",

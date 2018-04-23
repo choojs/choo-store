@@ -1,27 +1,33 @@
-class Store {
-  constructor (opts) {
-    opts = opts || {}
-    if (!opts.namespace) throw new Error('namespace required')
-    if (!opts.initialState) throw new Error('initialState required')
-    if (!opts.events) throw new Error('events required')
-    Object.assign(this, opts)
-    this.connect = this.connect.bind(this)
-  }
+function createStore (opts) {
+  var { namespace, initialState, events } = opts || {}
 
-  connect (state, emitter) {
-    const { namespace, initialState, events } = this
+  if (!opts.namespace) throw new Error('namespace required')
+  if (!opts.initialState) throw new Error('initialState required')
+  if (!opts.events) throw new Error('events required')
 
-    state[namespace] = initialState
+  function store (state, emitter) {
+    state[namespace] = Object.assign({}, initialState)
+    state.events[namespace] = {}
 
     Object.keys(events).forEach(event => {
-      emitter.on(`${namespace}:${event}`, action(opts => {
+      var eventName = `${namespace}:${event}`
+
+      // attach events to emitter
+      emitter.on(eventName, action(opts => {
         events[event](opts, state[namespace], emitter, state)
       }))
+
+      // add event names to state.events
+      state.events[namespace][event] = eventName
     })
 
+    // add reset event to emitter
     emitter.on(`${namespace}:reset`, action(opts => {
-      state[namespace] = initialState
+      state[namespace] = Object.assign({}, initialState)
     }))
+
+    // add reset event to state.events
+    state.events[namespace].reset = `${namespace}:reset`
 
     function action (fn) {
       return opts => {
@@ -31,6 +37,10 @@ class Store {
       }
     }
   }
+
+  Object.assign(store, opts)
+
+  return store
 }
 
-module.exports = Store
+module.exports = createStore

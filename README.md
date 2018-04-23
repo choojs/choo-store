@@ -18,12 +18,12 @@ Create a namespaced store for a [`choo`](https://github.com/choojs/choo) applica
 
 ## Features
 
-- Conventions!
-  - `namespace` to keep your state clean
-  - `initialState` to make resetting easy
-  - `events` for all your events
-  - `reset` event included by default
-  - `render` is a default option for all events
+- `namespace` to keep your state clean
+- `initialState` to make resetting easy
+- `events` for all your events
+- `reset` event included by default
+- `render` is a default option for all events
+- event names made available in `state.events`
 
 ## Install
 
@@ -34,11 +34,9 @@ npm install choo-store
 ## Usage
 
 ```js
-var Store = require('choo-store')
-var html = require('choo/html')
-var choo = require('choo')
+var createStore = require('choo-store')
 
-const clickStore = new Store({
+var store = createStore({
   namespace: 'clicks',
   initialState: { count: 0 },
   events: {
@@ -48,29 +46,26 @@ const clickStore = new Store({
   }
 })
 
-var app = choo()
-app.route('/', mainView)
-app.use(clickStore.connect)
-app.mount('body')
-
-function mainView (state, emit) {
-  return html`
-    <body>
-      <h1>count is ${state.clicks.count}</h1>
-      <button onclick=${increment}>Increment</button>
-      <button onclick=${reset}>Reset</button>
-    </body>
-  `
-
-  function increment () {
-    emit('clicks:increment', { render: true })
-  }
-
-  function reset () {
-    emit('clicks:reset', { render: true })
-  }
-}
+app.use(store)
 ```
+
+See [`example.js`](./example.js) for a full example.
+
+## API
+
+### `createStore({ namespace: string, initialState: object, events: object })`
+
+Params:
+
+- `namespace`: Name of store. Used for namespacing in state object and prefixing of event names.
+- `initialState`: Initial state of store.
+  - This will be the state of the store on initialization of the app.
+  - When calling the `reset` event, state will be returned to this value.
+- `events`: List of events with corresponding functions.
+
+All params are required.
+
+Returns a regular store function (`function (state, emitter)`) to be supplied to Choo's `app.use()` function.
 
 ## Why
 
