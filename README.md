@@ -48,12 +48,17 @@ function mainView (state, emit) {
   return html`
     <body>
       <h1>count is ${state.clicks.count}</h1>
-      <button onclick=${onclick}>Increment</button>
+      <button onclick=${increment}>Increment</button>
+      <button onclick=${reset}>Reset</button>
     </body>
   `
 
-  function onclick () {
-    emit('clicks:increment')
+  function increment () {
+    emit('clicks:increment', { render: true })
+  }
+
+  function reset () {
+    emit('clicks:reset', { render: true })
   }
 }
 ```
