@@ -53,19 +53,36 @@ See [`example.js`](./example.js) for a full example.
 
 ## API
 
-### `createStore({ namespace: string, initialState: object, events: object })`
+### `createStore({ namespace, initialState, events })`
 
 Params:
 
-- `namespace`: Name of store. Used for namespacing in state object and prefixing of event names.
-- `initialState`: Initial state of store.
+- `namespace` - *string*: Name of store. Used for namespacing in state object and prefixing of event names.
+- `initialState` - *object*: Initial state of store.
   - This will be the state of the store on initialization of the app.
   - When calling the `reset` event, state will be returned to this value.
-- `events`: List of events with corresponding functions.
+- `events` - *object*: List of named event functions.
 
 All params are required.
 
 Returns a regular store function (`function (state, emitter)`) to be supplied to Choo's `app.use()` function.
+
+#### Event Functions
+
+Each event function has the following signature:
+
+```js
+function (opts, store, emitter, state)
+```
+
+Params:
+
+- `opts` - *object*: Event options.
+- `store` - *object*: State of local store.
+- `emitter` - *[nanobus](https://github.com/choojs/nanobus)*: Choo event emitter.
+- `state` - *object*: State of choo app.
+
+Having the local store as the second parameter encourages modifying local state only, and using events to modify the state of other stores (basically treating global state as read-only).
 
 ## Why
 
