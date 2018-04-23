@@ -4,7 +4,7 @@ var devtools = require('choo-devtools')
 var createStore = require('./')
 
 var store = createStore({
-  namespace: 'clicks',
+  storeName: 'clicks',
   initialState: { count: 0 },
   events: {
     increment: (opts, store, emitter, state) => {

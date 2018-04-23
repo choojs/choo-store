@@ -3,7 +3,7 @@
 [![npm version][2]][3] [![build status][4]][5]
 [![downloads][8]][9] [![js-standard-style][10]][11]
 
-Create a namespaced store for a [`choo`](https://github.com/choojs/choo) application.
+Create a store for a [`choo`](https://github.com/choojs/choo) application.
 
 [0]: https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square
 [1]: https://nodejs.org/api/documentation.html#documentation_stability_index
@@ -18,11 +18,11 @@ Create a namespaced store for a [`choo`](https://github.com/choojs/choo) applica
 
 ## Features
 
-- `namespace` to keep your state clean
-- `initialState` to make resetting easy
-- `events` for all your events
-- `reset` event included by default
-- event names made available in `state.events`
+- namespace with [`storeName`](https://github.com/choojs/choo#appusecallbackstate-emitter-app) to keep state clean and improve tracing
+- set `initialState` to make resetting easy
+- organize all your `events` to reduce boilerplate
+- event names made available in `state.events.storeName`
+- free `reset` event included with purchase
 
 ## Install
 
@@ -36,7 +36,7 @@ npm install choo-store
 var createStore = require('choo-store')
 
 var store = createStore({
-  namespace: 'clicks',
+  storeName: 'clicks',
   initialState: { count: 0 },
   events: {
     increment: (opts, store, emitter, state) => {
@@ -53,11 +53,11 @@ See [`example.js`](./example.js) for a full example.
 
 ## API
 
-### `createStore({ namespace, initialState, events })`
+### `createStore({ storeName, initialState, events })`
 
 Params:
 
-- `namespace` - *string*: Name of store. Used for namespacing in state object and prefixing of event names.
+- `storeName` - *string*: Name of store. Used for namespacing in state object and prefixing of event names.
 - `initialState` - *object*: Initial state of store.
   - This will be the state of the store on initialization of the app.
   - When calling the `reset` event, state will be returned to this value.
@@ -84,14 +84,14 @@ Params:
 
 #### `reset` event
 
-A `reset` event (e.g. `namespace:reset`) is added by default.
+A `reset` event (e.g. `storeName:reset`) is added by default.
 
 Emitting this event will reset the store's state to `initialState`.
 
 It takes a `render` boolean option in case you want to emit a render event afterwards.
 
 ```js
-emit('namespace:reset', { render: true })
+emit('storeName:reset', { render: true })
 ```
 
 ## Why
