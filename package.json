@@ -1,6 +1,6 @@
 {
   "name": "choo-store",
-  "description": "Create a store for a choo application.",
+  "description": "Create a namespaced store for a choo application.",
   "version": "0.1.0",
   "author": "Nate Goldman <ungoldman@gmail.com>",
   "bugs": {
