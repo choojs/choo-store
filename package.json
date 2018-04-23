@@ -1,0 +1,26 @@
+{
+  "name": "choo-store",
+  "description": "Create a store for a choo application.",
+  "version": "0.1.0",
+  "author": "Nate Goldman <ungoldman@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/ungoldman/choo-store/issues"
+  },
+  "devDependencies": {
+    "standard": "^11.0.1"
+  },
+  "homepage": "https://github.com/ungoldman/choo-store",
+  "keywords": [
+    "choo",
+    "store"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ungoldman/choo-store.git"
+  },
+  "scripts": {
+    "test": "standard"
+  }
+}
