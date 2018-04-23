@@ -22,7 +22,6 @@ Create a namespaced store for a [`choo`](https://github.com/choojs/choo) applica
 - `initialState` to make resetting easy
 - `events` for all your events
 - `reset` event included by default
-- `render` is a default option for all events
 - event names made available in `state.events`
 
 ## Install
@@ -42,6 +41,7 @@ var store = createStore({
   events: {
     increment: (opts, store, emitter, state) => {
       store.count++
+      emitter.emit('render')
     }
   }
 })
@@ -72,17 +72,27 @@ Returns a regular store function (`function (state, emitter)`) to be supplied to
 Each event function has the following signature:
 
 ```js
-function (opts, store, emitter, state)
+function event (options, store, emitter, state) {}
 ```
 
 Params:
 
-- `opts` - *object*: Event options.
+- `options` - *any*: Event options.
 - `store` - *object*: State of local store.
 - `emitter` - *[nanobus](https://github.com/choojs/nanobus)*: Choo event emitter.
-- `state` - *object*: State of choo app.
+- `state` - *object*: Global app state.
 
-Having the local store as the second parameter encourages modifying local state only, and using events to modify the state of other stores (basically treating global state as read-only).
+#### `reset` event
+
+A `reset` event (e.g. `namespace:reset`) is added by default.
+
+Emitting this event will reset the store's state to `initialState`.
+
+It takes a `render` boolean option in case you want to emit a render event afterwards.
+
+```js
+emit('namespace:reset', { render: true })
+```
 
 ## Why
 
