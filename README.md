@@ -67,6 +67,8 @@ All params are required.
 
 Returns a regular store function (`function (state, emitter)`) to be supplied to Choo's `app.use()` function.
 
+Attaches event names to `state.events[storeName]` for convenience. For example, if you have a store `clicks` with an event `increment`, the event name (`clicks:increment`) will be available at `state.events.clicks.increment`.
+
 #### Event Functions
 
 Each event function has the following signature:
@@ -105,8 +107,10 @@ As an application gets larger, some issues can arise that need to be dealt with:
 - properly namespacing stores and events
 - resetting stores to their initial state
 - avoiding direct manipulation of other stores
+- providing coherent structure for a project
+- reducing repetitive boilerplate
 
-Doing the above gets time consuming the bigger an app gets. A lot of boilerplate is needed, and it's easy to lose track of [value drift](https://universalpaperclips.gamepedia.com/Value_Drift) between stores in these cases. This module aims to make the process of managing multiple stores simple and easy.
+Doing the above gets time consuming the bigger an app gets. Without lots of attention to detail, it's easy to lose track of [value drift](https://universalpaperclips.gamepedia.com/Value_Drift) between stores in these cases. This module aims to make the process of managing stores and events simple and easy.
 
 ## Contributing
 
