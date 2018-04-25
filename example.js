@@ -7,8 +7,8 @@ var store = createStore({
   storeName: 'clicks',
   initialState: { count: 0 },
   events: {
-    increment: (opts, store, emitter, state) => {
-      store.count++
+    increment: ({ data, store, emitter }) => {
+      store.count += data
       emitter.emit('render')
     }
   }
@@ -30,7 +30,7 @@ function mainView (state, emit) {
   `
 
   function increment () {
-    emit(state.events.clicks.increment)
+    emit(state.events.clicks.increment, 1)
   }
 
   function reset () {

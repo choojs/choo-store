@@ -34,12 +34,13 @@ npm install choo-store
 
 ```js
 var createStore = require('choo-store')
+var app = require('choo')()
 
 var store = createStore({
   storeName: 'clicks',
   initialState: { count: 0 },
   events: {
-    increment: (opts, store, emitter, state) => {
+    increment: ({ store, emitter }) => {
       store.count++
       emitter.emit('render')
     }
@@ -65,7 +66,7 @@ Params:
 
 All params are required.
 
-Returns a regular store function (`function (state, emitter)`) to be supplied to Choo's `app.use()` function.
+Returns a regular store function (`function (state, emitter, app)`) to be supplied to Choo's `app.use()` function.
 
 Attaches event names to `state.events[storeName]` for convenience. For example, if you have a store `clicks` with an event `increment`, the event name (`clicks:increment`) will be available at `state.events.clicks.increment`.
 
@@ -74,15 +75,18 @@ Attaches event names to `state.events[storeName]` for convenience. For example, 
 Each event function has the following signature:
 
 ```js
-function event (options, store, emitter, state) {}
+function event ({ data, store, state, emitter, app }) {}
 ```
 
 Params:
 
-- `options` - *any*: Event options.
-- `store` - *object*: State of local store.
-- `emitter` - *[nanobus](https://github.com/choojs/nanobus)*: Choo event emitter.
+- `data` - *any*: Event data supplied by user.
+- `store` - *object*: Local store state.
 - `state` - *object*: Global app state.
+- `emitter` - *[nanobus](https://github.com/choojs/nanobus)*: Choo event emitter.
+- `app` - *[choo](https://github.com/choojs/choo)*: Choo instance.
+
+Params are wrapped in a single object so that argument order is made irrelevant and users can take what they need from the event parameters object.
 
 #### `reset` event
 

@@ -5,7 +5,8 @@ function createStore (opts) {
   if (!initialState) throw new Error('initialState required')
   if (!events) throw new Error('events required')
 
-  function store (state, emitter) {
+  // API ref: https://github.com/choojs/choo#appusecallbackstate-emitter-app
+  function store (state, emitter, app) {
     state[storeName] = Object.assign({}, initialState)
     state.events[storeName] = {}
 
@@ -13,8 +14,8 @@ function createStore (opts) {
       var eventName = `${storeName}:${event}`
 
       // attach events to emitter
-      emitter.on(eventName, opts => {
-        events[event](opts, state[storeName], emitter, state)
+      emitter.on(eventName, data => {
+        events[event]({ data, store: state[storeName], emitter, state, app })
       })
 
       // add event names to state.events
@@ -22,10 +23,10 @@ function createStore (opts) {
     })
 
     // add reset event to emitter
-    emitter.on(`${storeName}:reset`, opts => {
-      opts = opts || {}
+    emitter.on(`${storeName}:reset`, data => {
+      data = data || {}
       state[storeName] = Object.assign({}, initialState)
-      if (opts.render) emitter.emit('render')
+      if (data.render) emitter.emit('render')
     })
 
     // add reset event to state.events
