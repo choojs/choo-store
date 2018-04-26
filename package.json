@@ -27,7 +27,7 @@
     "url": "https://github.com/ungoldman/choo-store.git"
   },
   "scripts": {
-    "example": "budo example.js --open",
+    "example": "budo example --open",
     "test": "standard"
   }
 }

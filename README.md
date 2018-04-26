@@ -78,7 +78,7 @@ module.exports = (state, emit) => {
 
 ### Example
 
-See [`example.js`](./example.js) for a full working example.
+See the [`example`](./example) folder for a full working example.
 
 You can also check it out locally by cloning this repo and running `npm i && npm run example`.
 
