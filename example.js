@@ -15,25 +15,20 @@ var store = createStore({
 })
 
 var app = choo()
+
 app.route('/', mainView)
 app.use(devtools())
 app.use(store)
 app.mount('body')
 
+var { actions } = store
+
 function mainView (state, emit) {
   return html`
     <body>
       <h1>count is ${state.clicks.count}</h1>
-      <button onclick=${increment}>Increment</button>
-      <button onclick=${reset}>Reset</button>
+      <button onclick=${e => actions.increment(1)}>Increment</button>
+      <button onclick=${e => actions.reset({ render: true })}>Reset</button>
     </body>
   `
-
-  function increment () {
-    emit(state.events.clicks.increment, 1)
-  }
-
-  function reset () {
-    emit(state.events.clicks.reset, { render: true })
-  }
 }
