@@ -18,11 +18,11 @@ Create a store for a [`choo`](https://github.com/choojs/choo) application.
 
 ## Features
 
-- namespace with [`storeName`](https://github.com/choojs/choo#appusecallbackstate-emitter-app) to keep state clean and improve tracing
-- set `initialState` to make resetting easy
-- organize all your `events` to reduce boilerplate
-- event names made available in `state.events.storeName`
-- free `reset` event included with purchase
+- **namespacing**: use [`storeName`](https://github.com/choojs/choo#appusecallbackstate-emitter-app) to keep state clean and improve tracing
+- **scoped state**: set `initialState` to make initializing and resetting easy
+- **simplified events API**: organize all your `events` to reduce boilerplate
+- **event names in state**: event names made available in `state.events.storeName`
+- **free reset event**: free `reset` event included with purchase
 
 ## Install
 
@@ -31,6 +31,8 @@ npm install choo-store
 ```
 
 ## Usage
+
+First, set up your store and register it with your app:
 
 ```js
 var createStore = require('choo-store')
@@ -48,6 +50,31 @@ var store = createStore({
 })
 
 app.use(store)
+```
+
+Then, you can use store events in a component:
+
+```js
+var html = require('choo/html')
+
+module.exports = (state, emit) => {
+  return html`
+    <body>
+      <h1>count is ${state.clicks.count}</h1>
+      <button onclick=${increment}>Increment</button>
+      <button onclick=${reset}>Reset</button>
+    </body>
+  `
+
+  function increment () {
+    // emit('clicks:increment', 1) works fine too
+    emit(state.events.clicks.increment, 1)
+  }
+
+  function reset () {
+    emit(state.events.clicks.reset, { render: true })
+  }
+}
 ```
 
 See [`example.js`](./example.js) for a full example.
@@ -70,7 +97,7 @@ Returns a regular store function (`function (state, emitter, app)`) to be suppli
 
 Attaches event names to `state.events[storeName]` for convenience. For example, if you have a store `clicks` with an event `increment`, the event name (`clicks:increment`) will be available at `state.events.clicks.increment`.
 
-#### Event Functions
+### Event Functions
 
 Each event function has the following signature:
 
