@@ -21,6 +21,7 @@ Create a store for a [`choo`](https://github.com/choojs/choo) application.
 - **namespacing**: use [`storeName`](https://github.com/choojs/choo#appusecallbackstate-emitter-app) to keep state clean and improve tracing
 - **scoped state**: set `initialState` to make initializing and resetting easy
 - **simplified events API**: organize all your `events` to reduce boilerplate
+- **action functions**: automagically creates action functions that accept data and emit events
 - **event names in state**: event names made available in `state.events.storeName`
 - **free reset event**: free `reset` event included with purchase
 
@@ -32,13 +33,12 @@ npm install choo-store
 
 ## Usage
 
-First, set up your store and register it with your app:
+First, set up your store's name, initial state, and events:
 
 ```js
 var createStore = require('choo-store')
-var app = require('choo')()
 
-var store = createStore({
+module.exports = createStore({
   storeName: 'clicks',
   initialState: { count: 0 },
   events: {
@@ -48,36 +48,39 @@ var store = createStore({
     }
   }
 })
+```
+
+Next, register your store with your choo app:
+
+```js
+var app = require('choo')()
+var store = require('./stores/clicks')
 
 app.use(store)
 ```
 
-Then, you can use store events in a component:
+Now you can use store state and actions in your component:
 
 ```js
 var html = require('choo/html')
+var { actions } = require('./stores/clicks')
 
 module.exports = (state, emit) => {
   return html`
     <body>
       <h1>count is ${state.clicks.count}</h1>
-      <button onclick=${increment}>Increment</button>
-      <button onclick=${reset}>Reset</button>
+      <button onclick=${e => actions.increment(1)}>Increment</button>
+      <button onclick=${e => actions.reset({ render: true })}>Reset</button>
     </body>
   `
-
-  function increment () {
-    // emit('clicks:increment', 1) works fine too
-    emit(state.events.clicks.increment, 1)
-  }
-
-  function reset () {
-    emit(state.events.clicks.reset, { render: true })
-  }
 }
 ```
 
-See [`example.js`](./example.js) for a full example.
+### Example
+
+See the [`example`](./example) folder for a full working example.
+
+You can also check it out locally by cloning this repo and running `npm i && npm run example`.
 
 ## API
 
@@ -97,12 +100,22 @@ Returns a regular store function (`function (state, emitter, app)`) to be suppli
 
 Attaches event names to `state.events[storeName]` for convenience. For example, if you have a store `clicks` with an event `increment`, the event name (`clicks:increment`) will be available at `state.events.clicks.increment`.
 
-### Event Functions
+Returned function also has an `actions` property containing ready-to-go named functions that take whatever data you pass and emit the right event.
 
-Each event function has the following signature:
+Once a store has been created, these three methods of emitting an event all do the same thing:
 
 ```js
-function event ({ data, store, state, emitter, app }) {}
+store.actions.increment(1)
+emit(state.events.clicks.increment, 1)
+emit('clicks:increment', 1)
+```
+
+### Event Functions
+
+Event functions live in the `events` object and have the following signature:
+
+```js
+function eventName ({ data, store, state, emitter, app }) {}
 ```
 
 Params:
@@ -124,7 +137,7 @@ Emitting this event will reset the store's state to `initialState`.
 It takes a `render` boolean option in case you want to emit a render event afterwards.
 
 ```js
-emit('storeName:reset', { render: true })
+store.actions.reset({ render: true })
 ```
 
 ## Why
