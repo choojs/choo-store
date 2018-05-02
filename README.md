@@ -21,7 +21,7 @@ Create a store for a [`choo`](https://github.com/choojs/choo) application.
 - **namespacing**: use [`storeName`](https://github.com/choojs/choo#appusecallbackstate-emitter-app) to keep state clean and improve tracing
 - **scoped state**: set `initialState` to make initializing and resetting easy
 - **simplified events API**: organize all your `events` to reduce boilerplate
-- **action functions**: automagically creates action functions that accept data and emit events
+- **action functions**: automagically creates `actions` that accept data and emit events
 - **event names in state**: event names made available in `state.events.storeName`
 - **free reset event**: free `reset` event included with purchase
 
