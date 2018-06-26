@@ -10,7 +10,9 @@
     "budo": "^11.2.0",
     "choo": "^6.0.0",
     "choo-devtools": "^2.5.0",
-    "standard": "^11.0.1"
+    "nyc": "^12.0.2",
+    "standard": "^11.0.1",
+    "tape": "^4.9.1"
   },
   "files": [
     "index.js"
@@ -28,6 +30,6 @@
   },
   "scripts": {
     "example": "budo example --open",
-    "test": "standard"
+    "test": "standard && nyc tape test.js"
   }
 }

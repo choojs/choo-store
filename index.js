@@ -9,14 +9,14 @@ function createStore (opts) {
 
   // API ref: https://github.com/choojs/choo#appusecallbackstate-emitter-app
   function store (state, emitter, app) {
-    state[storeName] = Object.assign({}, initialState)
+    state[storeName] = deepClone(initialState)
     state.events[storeName] = {}
 
     // add reset event if undefined
     if (!props.events.reset) {
       props.events.reset = ({ data, store, emitter }) => {
         var { render } = data || {}
-        state[storeName] = Object.assign({}, initialState)
+        state[storeName] = deepClone(initialState)
         if (render) emitter.emit('render')
       }
     }
@@ -40,6 +40,10 @@ function createStore (opts) {
   Object.assign(store, props)
 
   return store
+}
+
+function deepClone (obj) {
+  return JSON.parse(JSON.stringify(obj))
 }
 
 module.exports = createStore
