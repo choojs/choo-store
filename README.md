@@ -92,6 +92,7 @@ Params:
 - `initialState` - *object*: Initial state of store.
   - This will be the state of the store on initialization of the app.
   - When calling the `reset` event, state will be returned to this value.
+  - Must be valid, serializable JSON
 - `events` - *object*: List of named event functions.
 
 All params are required.
