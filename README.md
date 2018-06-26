@@ -103,22 +103,6 @@ Attaches event names to `state.events[storeName]` for convenience. For example, 
 
 Returned function also has an `actions` property containing ready-to-go named functions that take whatever data you pass and emit the right event.
 
-#### Example
-
-```js
-module.exports = createStore({
-  storeName: 'corral',
-  initialState: {
-    horses: []
-  },
-  events: {
-    addHorse: ({ data, store }) => {
-      store.horses.push(data)
-    }
-  }
-})
-```
-
 ### Event Functions
 
 Event functions live in the `events` object and have the following signature:
@@ -137,7 +121,7 @@ Params:
 
 Params are wrapped in a single object so that argument order is made irrelevant and users can take what they need from the event parameters object.
 
-#### Emitting Events
+### Emitting Events
 
 Once a store has been created, these three methods of emitting an event all do the same thing:
 
@@ -147,7 +131,7 @@ emit(state.events.clicks.increment, 1)
 emit('clicks:increment', 1)
 ```
 
-#### `reset` event
+### `reset` event
 
 A `reset` event (e.g. `storeName:reset`) is added by default.
 
