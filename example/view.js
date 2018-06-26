@@ -1,7 +1,5 @@
 var html = require('choo/html')
-var store = require('./store')
-
-var { actions } = store
+var { actions } = require('./store')
 
 module.exports = (state, emit) => {
   return html`
