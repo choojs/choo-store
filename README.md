@@ -102,12 +102,20 @@ Attaches event names to `state.events[storeName]` for convenience. For example, 
 
 Returned function also has an `actions` property containing ready-to-go named functions that take whatever data you pass and emit the right event.
 
-Once a store has been created, these three methods of emitting an event all do the same thing:
+#### Example
 
 ```js
-store.actions.increment(1)
-emit(state.events.clicks.increment, 1)
-emit('clicks:increment', 1)
+module.exports = createStore({
+  storeName: 'corral',
+  initialState: {
+    horses: []
+  },
+  events: {
+    addHorse: ({ data, store }) => {
+      store.horses.push(data)
+    }
+  }
+})
 ```
 
 ### Event Functions
@@ -127,6 +135,16 @@ Params:
 - `app` - *[choo](https://github.com/choojs/choo)*: Choo instance.
 
 Params are wrapped in a single object so that argument order is made irrelevant and users can take what they need from the event parameters object.
+
+#### Emitting Events
+
+Once a store has been created, these three methods of emitting an event all do the same thing:
+
+```js
+store.actions.increment(1)
+emit(state.events.clicks.increment, 1)
+emit('clicks:increment', 1)
+```
 
 #### `reset` event
 
