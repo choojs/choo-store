@@ -65,10 +65,10 @@ Now you can use store state and actions in your component:
 var html = require('choo/html')
 var { actions } = require('./stores/clicks')
 
-module.exports = (state, emit) => {
+module.exports = ({ clicks }) => {
   return html`
     <body>
-      <h1>count is ${state.clicks.count}</h1>
+      <h1>count is ${clicks.count}</h1>
       <button onclick=${e => actions.increment(1)}>Increment</button>
       <button onclick=${e => actions.reset({ render: true })}>Reset</button>
     </body>
