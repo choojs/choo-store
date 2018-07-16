@@ -1,3 +1,13 @@
+var globals = [
+  'DOMContentLoaded',
+  'DOMTitleChange',
+  'navigate',
+  'popState',
+  'pushState',
+  'render',
+  'replaceState'
+]
+
 function createStore (opts) {
   var { storeName, initialState, events } = opts || {}
 
@@ -22,18 +32,21 @@ function createStore (opts) {
     }
 
     Object.keys(events).forEach(event => {
-      var eventName = `${storeName}:${event}`
+      var eventName = globals.includes(event) ? event : `${storeName}:${event}`
 
       // attach events to emitter
       emitter.on(eventName, data => {
         events[event]({ data, store: state[storeName], emitter, state, app })
       })
 
-      // add event names to state.events
-      state.events[storeName][event] = eventName
+      // don't create namespaced event hooks for global events
+      if (!globals.includes(event)) {
+        // add event names to state.events
+        state.events[storeName][event] = eventName
 
-      // add action method
-      props.actions[event] = data => emitter.emit(eventName, data)
+        // add action method
+        props.actions[event] = data => emitter.emit(eventName, data)
+      }
     })
   }
 

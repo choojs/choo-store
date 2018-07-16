@@ -19,7 +19,7 @@ test('storeName', t => {
 })
 
 test('integration', t => {
-  var app, objStore, arrStore, resetStore
+  var app, objStore, arrStore, resetStore, globalStore
 
   t.test('instantiation', t => {
     t.doesNotThrow(() => {
@@ -58,6 +58,18 @@ test('integration', t => {
       })
     }, 'create reset store')
 
+    t.doesNotThrow(() => {
+      globalStore = createStore({
+        storeName: 'global',
+        initialState: { navigations: 0 },
+        events: {
+          navigate: function ({ store }) {
+            store.navigations++
+          }
+        }
+      })
+    }, 'create global (navigation) store')
+
     t.end()
   })
 
@@ -67,6 +79,7 @@ test('integration', t => {
       app.use(objStore)
       app.use(arrStore)
       app.use(resetStore)
+      app.use(globalStore)
       app.route('/', (state, emit) => html`<body></body>`)
       app.toString('/')
     }, 'stores register')
@@ -78,7 +91,7 @@ test('integration', t => {
     t.equals(app.state.obj.a, 1, 'objStore state is good')
     t.equals(app.state.arr[0], 1, 'arrStore state is good')
     t.equals(app.state.reset.a, 3, 'resetStore state is good')
-
+    t.equals(app.state.global.navigations, 0, 'globalStore state is good')
     t.end()
   })
 
@@ -88,6 +101,16 @@ test('integration', t => {
 
     t.equals(app.state.obj.a, 2, 'arrStore state updated')
     t.equals(app.state.arr[0], 2, 'arrStore state updated')
+
+    t.end()
+  })
+
+  t.test('global navigation', t => {
+    t.notOk(globalStore.actions.navigate, 'global event not namespaced')
+
+    app.emit(app.state.events.NAVIGATE)
+
+    t.equals(app.state.global.navigations, 1, 'globalStore state updated')
 
     t.end()
   })
