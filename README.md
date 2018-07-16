@@ -131,6 +131,28 @@ emit(state.events.clicks.increment, 1)
 emit('clicks:increment', 1)
 ```
 
+### Global Events
+
+You can listen for any of Choo's global events (`DOMContentLoaded`, `DOMTitleChange`,
+`navigate`, `popState`, `pushState`, `render`, `replaceState`) by adding an event
+with the appropriate name to the `events` object:
+
+```js
+createStore({
+  storeName: 'history',
+  initialState: { navigations: 0 },
+  events: {
+    navigate: ({ store, emitter }) => {
+      store.navigations++
+      emitter.emit('render')
+    }
+  }
+})
+```
+
+> Note: global events are not added to `state.events[storeName]` and do not have
+an action function associated with them since they are not namespaced events.
+
 ### `reset` event
 
 A `reset` event (e.g. `storeName:reset`) is added by default.
