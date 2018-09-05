@@ -8,18 +8,28 @@ var globals = [
   'replaceState'
 ]
 
-function createStore (opts) {
-  var { storeName, initialState, events } = opts || {}
+/**
+ * Create a new store.
+ *
+ * @param  {object} options - store options
+ * @param  {string} options[].storeName - name of store - used for namespacing & debugging
+ * @param  {object} options[].initialState - initial state of store - used for init & reset
+ * @param  {object} options[].events - event functions
+ * @return {function} - choo middleware function
+ */
+function createStore (options) {
+  var { storeName, initialState, events } = options || {}
 
-  if (!storeName) throw new Error('storeName required')
-  if (!initialState) throw new Error('initialState required')
-  if (!events) throw new Error('events required')
+  if (typeof storeName !== 'string') throw new Error('storeName required')
+  if (typeof initialState !== 'object') throw new Error('initialState required')
+  if (typeof events !== 'object') throw new Error('events required')
 
-  var props = Object.assign({}, opts, { actions: {} })
+  var props = Object.assign({}, options, { actions: {} })
 
   // API ref: https://github.com/choojs/choo#appusecallbackstate-emitter-app
   function store (state, emitter, app) {
     state[storeName] = deepClone(initialState)
+    state.events = state.events || {} // be defensive
     state.events[storeName] = {}
 
     // add reset event if undefined
