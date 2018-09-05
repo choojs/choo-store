@@ -1,6 +1,7 @@
 var test = require('tape')
 var choo = require('choo')
 var html = require('choo/html')
+var nanobus = require('nanobus')
 var createStore = require('./')
 
 test('errors', t => {
@@ -135,6 +136,18 @@ test('integration', t => {
     t.equals(app.state.obj.a, 1, 'object reset state is good')
     t.equals(app.state.arr[0], 1, 'array reset state is good')
     t.equals(app.state.reset.a, 81, 'custom reset state is good')
+
+    t.end()
+  })
+
+  t.test('does not throw on missing state.events', t => {
+    var store = createStore({
+      storeName: 'nope',
+      initialState: { a: 1 },
+      events: { increment: ({ store }) => (store.a++) }
+    })
+
+    t.doesNotThrow(() => store({}, nanobus()), 'works fine if state has no events object')
 
     t.end()
   })
