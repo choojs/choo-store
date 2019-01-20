@@ -2,13 +2,14 @@
 
 import * as EventEmitter from 'events'
 import Choo from 'choo'
-type Emitter = (
+
+type IEmitter = {
   data: any,
   store: string,
   emitter: EventEmitter,
   state: Choo.IState,
   app: Choo
-) => void
+}
 
 declare namespace ChooStore {
   export interface InitialState {
@@ -16,16 +17,18 @@ declare namespace ChooStore {
   }
 
   export interface Events {
-    [key:string]: Emitter
+    [key:string]: IEmitter
   }
 
-  export function Emitter(): Emitter
+  export function Emitter(args:IEmitter): void
+
+  export interface IChooStore {
+    storeName: string
+    initialState: InitialState,
+    events: Events
+  }
 }
 
-declare function ChooStore (
-  storeName:string, 
-  initialState:ChooStore.InitialState, 
-  events:ChooStore.Events
- ): (state:Choo.IState, emitter: EventEmitter, app: Choo) => void
+declare function ChooStore (store:ChooStore.IChooStore): (state:Choo.IState, emitter: EventEmitter, app: Choo) => void
 
 export = ChooStore
