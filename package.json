@@ -17,7 +17,8 @@
     "tape": "^4.9.1"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "homepage": "https://github.com/ungoldman/choo-store",
   "keywords": [
